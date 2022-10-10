@@ -14,6 +14,9 @@ export class MovieComponent implements OnInit {
   count:number=0;
   weightedMoviesArray:any=[];
   recomendation:boolean=false;
+  moviesNotRated:any=[]
+  moviesRecommended:any=[]
+
   @ViewChild('widgetsContent', { read: ElementRef }) widgetsContent: ElementRef<any>;
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -23,7 +26,7 @@ export class MovieComponent implements OnInit {
 
   ngOnInit(): void {
     this.movies=moviesCategories
-    console.log(this.movies)
+    // console.log(this.movies)
   }
 
   AddRatings(rating:number, mov:any){
@@ -45,6 +48,8 @@ export class MovieComponent implements OnInit {
     this.movies.forEach((x:any)=>{
       if(x.ratings >0){
         this.weightedMoviesArray.push(x)
+      }else{
+  this.moviesNotRated.push(x)
       }
     })
   }
@@ -58,7 +63,7 @@ export class MovieComponent implements OnInit {
   getrecommendations(){
   this.recomendation=true;
  this.weightedMoviesMovies()
- this.weightedMoviesArray.forEach((x:any) => {
+  this.weightedMoviesArray.forEach((x:any) => {
           x.Adventure = x.ratings*x.Adventure
           x.Animation= x.ratings*x.Animation
           x.Comedy=x.ratings*x.Comedy
@@ -83,7 +88,45 @@ export class MovieComponent implements OnInit {
    var Action =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Action; }, 0);
    var Crime =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Crime; }, 0);
    var Thriller =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Thriller; }, 0);
+   var Horror =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Horror; }, 0);
+   var Mystery =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Mystery; }, 0);
+   var SciFi =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.SciFi; }, 0);
+   var Documentary =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Documentary; }, 0);
+   var Musical =this.weightedMoviesArray.reduce(function (acc:any, obj:any) { return acc + obj.Musical; }, 0);
 
-    console.log(this.weightedMoviesArray)
+  //  console.log(this.weightedMoviesArray)
+  //   console.log(Romance)
+ var userProfile={"Adventure":Adventure, "Animation": Animation, "Comedy":Comedy, "Fantasy":Fantasy,"Romance":Romance,"Drama":Drama,"Action":Action,"Crime":Crime, "Thriller":Thriller, "Horror":Horror, "Mystery":Mystery, "SciFi":SciFi, "Documentary":Documentary, "Musical":Musical }
+// console.log(userProfile)
+
+ this.moviesNotRated.forEach((x:any)=>{
+          x.Adventure = x.Adventure*userProfile.Adventure
+          x.Animation= x.Animation*userProfile.Animation
+          x.Comedy=x.Comedy*userProfile.Comedy
+          x.Fantasy=x.Fantasy*userProfile.Fantasy
+          x.Romance=x.Romance*userProfile.Romance
+          x.Drama=x.Drama*userProfile.Drama
+          x.Action=x.Action*userProfile.Action
+          x.Crime=x.Crime*userProfile.Crime
+          x.Thriller=x.Thriller*userProfile.Thriller
+          x.Horror=x.Horror*userProfile.Horror
+          x.Mystery=x.Mystery*userProfile.Mystery
+          x.SciFi=x.SciFi*userProfile.SciFi
+          x.Documentary=x.Documentary*userProfile.Documentary
+          x.Musical=x.Musical* userProfile.Musical
+          let categories = Object.keys(x);
+          var categoryList: string[]=[]
+          categories.forEach((cat:any) => {
+            if(x[cat]>0){
+              categoryList.push(`${cat}`)
+              // console.log(`There are ${x[cat]} ${cat}`);
+            }
+
+          })
+          this.moviesRecommended.push({"title":x.title, "sum":x.Adventure+ x.Animation+x.Comedy+ x.Fantasy+ x.Romance+x.Drama+x.Action+ x.Crime+x.Thriller+ x.Horror+ x.Mystery+x.SciFi+x.Documentary+ x.Musical+x.Adventure, "categoryList":categoryList})
+
+ })
+//  console.log(this.moviesRecommended)
+
   }
 }

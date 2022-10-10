@@ -17,3 +17,11 @@
   overflow: hidden;
   scroll-behavior: smooth;
 }
+.movieId{
+  display: none;
+}
+
+  .table-wrap {
+    height: 680px;
+    overflow-y: auto;
+  }
